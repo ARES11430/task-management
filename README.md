@@ -21,7 +21,7 @@ Make sure you have Node.js (v18 or higher) and npm installed.
 Installation
 Clone the repository:
 
-git clone [https://github.com/ARES11430/repo-name.git]
+git clone [https://github.com/ARES11430/task-management.git]
 cd your-repo-name
 
 Install dependencies:
@@ -57,41 +57,13 @@ $ npm run test:cov
 API Endpoints
 The following table lists the available API endpoints for managing tasks.
 
-Method
-
-Endpoint
-
-Description
-
-POST
-
-/tasks
-
-Create a new task.
-
-GET
-
-/tasks
-
-Get a list of all tasks.
-
-GET
-
-/tasks/:id
-
-Get a single task by its ID.
-
-PATCH
-
-/tasks/:id
-
-Update a task's details.
-
-DELETE
-
-/tasks/:id
-
-Delete a task.
+| Method | Endpoint      | Description                  |
+| :----- | :------------ | :--------------------------- |
+| `POST` | `/tasks`      | Create a new task.           |
+| `GET`  | `/tasks`      | Get a list of all tasks.     |
+| `GET`  | `/tasks/:id`  | Get a single task by its ID. |
+| `PATCH`| `/tasks/:id`  | Update a task's details.     |
+| `DELETE`| `/tasks/:id` | Delete a task.               |
 
 License
 This project is licensed under the MIT License. See the LICENSE file for details.
