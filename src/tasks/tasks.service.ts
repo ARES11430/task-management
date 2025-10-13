@@ -34,14 +34,16 @@ export class TasksService {
   }
 
   getTaskById(id: string): Task | undefined {
-    return this.tasks.find((task) => task.id === id);
-  }
-
-  deleteTask(id: string): void {
-    const found = this.getTaskById(id);
+    const found = this.tasks.find((task) => task.id === id);
     if (!found) {
       throw new NotFoundException(`Task with ID "${id}" not found`);
     }
+    return found;
+  }
+
+  deleteTask(id: string): void {
+    // * check not found validation
+    this.getTaskById(id);
     this.tasks = this.tasks.filter((task) => task.id !== id);
   }
 
