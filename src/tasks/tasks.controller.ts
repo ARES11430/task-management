@@ -10,15 +10,21 @@ import {
 } from '@nestjs/common';
 import { CreateTaskDTO } from './dtos/create-task.dto';
 import { GetTasksFilterDto } from './dtos/get-tasks-filter.dto';
-import type { Task, TaskStatus } from './tasks.model';
+import type { TaskStatus } from './task-status.enum';
 import { TasksService } from './tasks.service';
 import { UpdateTaskStatusDto } from './dtos/update-task-status.dto';
+import { Task } from './task.entity';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 
-  @Get()
+  @Get('/:id')
+  getTaskByID(@Param('id') id: string): Promise<Task> {
+    return this.tasksService.getTaskById(id);
+  }
+
+  /*   @Get()
   getTasks(@Query() filterDto: GetTasksFilterDto): Task[] {
     if (Object.keys(filterDto).length) {
       return this.tasksService.getTasks(filterDto);
@@ -49,5 +55,5 @@ export class TasksController {
   @Post()
   createTask(@Body() createTaskDTO: CreateTaskDTO): Task {
     return this.tasksService.createTask(createTaskDTO);
-  }
+  } */
 }
