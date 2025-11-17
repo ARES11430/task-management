@@ -12,7 +12,7 @@ export class TaskRepository {
     findDone(): Promise<Task[]>;
     findById(id: string): Promise<Task | null>;
     createTask(createTaskDTO: CreateTaskDTO, user: User): Promise<Task>;
-    getTasks(filterDto: GetTasksFilterDto): Promise<Task[]>;
+    getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]>;
   };
 
   constructor(private dataSource: DataSource) {
@@ -36,9 +36,13 @@ export class TaskRepository {
         await this.save(task);
         return task;
       },
-      async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]> {
+      async getTasks(
+        filterDto: GetTasksFilterDto,
+        user: User,
+      ): Promise<Task[]> {
         const { status, search } = filterDto;
         const query = this.createQueryBuilder('task');
+        query.where({ user });
 
         if (status) {
           query.andWhere('task.status = :status', { status });
