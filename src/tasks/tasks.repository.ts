@@ -4,13 +4,14 @@ import { CreateTaskDTO } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskStatus } from './task-status.enum';
 import { Task } from './task.entity';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class TaskRepository {
   public readonly repo: Repository<Task> & {
     findDone(): Promise<Task[]>;
     findById(id: string): Promise<Task | null>;
-    createTask(createTaskDTO: CreateTaskDTO): Promise<Task>;
+    createTask(createTaskDTO: CreateTaskDTO, user: User): Promise<Task>;
     getTasks(filterDto: GetTasksFilterDto): Promise<Task[]>;
   };
 
@@ -22,13 +23,14 @@ export class TaskRepository {
       findById(id: string) {
         return this.findOneBy({ id });
       },
-      async createTask(createTaskDTO: CreateTaskDTO) {
+      async createTask(createTaskDTO: CreateTaskDTO, user: User) {
         const { title, description } = createTaskDTO;
 
         const task = this.create({
           title,
           description,
           status: TaskStatus.OPEN,
+          user,
         });
 
         await this.save(task);
