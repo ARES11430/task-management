@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { CreateTaskDTO } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
@@ -15,7 +19,10 @@ export class TaskRepository {
     getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]>;
   };
 
+  private logger = new Logger('TaskRepository');
+
   constructor(private dataSource: DataSource) {
+    const logger = this.logger;
     this.repo = this.dataSource.getRepository(Task).extend({
       findDone() {
         return this.find({ where: { status: TaskStatus.DONE } });
@@ -55,8 +62,18 @@ export class TaskRepository {
           );
         }
 
-        const tasks = await query.getMany();
-        return tasks;
+        try {
+          const tasks = await query.getMany();
+          return tasks;
+        } catch (error) {
+          logger.error(
+            `Failed to get tasks for user "${
+              user.username
+            }". Filters: ${JSON.stringify(filterDto)}`,
+            error.stack,
+          );
+          throw new InternalServerErrorException();
+        }
       },
     });
   }
