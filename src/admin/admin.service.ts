@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserRole } from '../auth/user-role.enum';
 import { User } from '../auth/user.entity';
 import { UsersRepository } from '../auth/users.repository';
@@ -16,6 +20,10 @@ export class AdminService {
 
     if (!user) {
       throw new NotFoundException(`User with ID "${id}" not found`);
+    }
+
+    if (user.role === role) {
+      throw new BadRequestException(`User is already a ${role}`);
     }
 
     user.role = role;

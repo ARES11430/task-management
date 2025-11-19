@@ -5,6 +5,7 @@ import { RolesGuard } from '../auth/roles.guard';
 import { UserRole } from '../auth/user-role.enum';
 import { User } from '../auth/user.entity';
 import { AdminService } from './admin.service';
+import { UpdateRoleDto } from './dtos/update-role.dto';
 
 @Controller('admin')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -20,8 +21,9 @@ export class AdminController {
   @Patch('/users/:id/role')
   updateUserRole(
     @Param('id') id: string,
-    @Body('role') role: UserRole,
+    @Body() updateRoleDto: UpdateRoleDto,
   ): Promise<User> {
+    const { role } = updateRoleDto;
     return this.adminService.updateUserRole(id, role);
   }
 }
