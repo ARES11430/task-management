@@ -4,7 +4,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { CreateTaskDTO } from './dto/create-task.dto';
+import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskStatus } from './task-status.enum';
 import { Task } from './task.entity';
@@ -15,7 +15,7 @@ export class TaskRepository {
   public readonly repo: Repository<Task> & {
     findDone(): Promise<Task[]>;
     findById(id: string): Promise<Task | null>;
-    createTask(createTaskDTO: CreateTaskDTO, user: User): Promise<Task>;
+    createTask(createTaskDTO: CreateTaskDto, user: User): Promise<Task>;
     getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]>;
   };
 
@@ -30,7 +30,7 @@ export class TaskRepository {
       findById(id: string) {
         return this.findOneBy({ id });
       },
-      async createTask(createTaskDTO: CreateTaskDTO, user: User) {
+      async createTask(createTaskDTO: CreateTaskDto, user: User) {
         const { title, description } = createTaskDTO;
 
         const task = this.create({
