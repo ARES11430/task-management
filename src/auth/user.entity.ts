@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Task } from '../tasks/task.entity';
 import { UserRole } from './user-role.enum';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User {
@@ -11,6 +12,7 @@ export class User {
   username: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({
@@ -20,6 +22,6 @@ export class User {
   })
   role: UserRole;
 
-  @OneToMany((type) => Task, (task) => task.user, { eager: true })
+  @OneToMany((type) => Task, (task) => task.user, { eager: false })
   tasks: Task[];
 }
