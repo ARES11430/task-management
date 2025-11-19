@@ -7,6 +7,7 @@ import { NotFoundException } from '@nestjs/common';
 import { User } from '../auth/user.entity';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { UserRole } from '../auth/user-role.enum';
 
 /**
  * Mock factory for the TaskRepository.
@@ -29,6 +30,7 @@ const mockUser: User = {
   id: 'someUserId',
   username: 'TestUser',
   password: 'somePassword',
+  role: UserRole.USER,
   tasks: [],
 };
 
@@ -85,9 +87,9 @@ describe('TasksService', () => {
       // Mock the `findOne` method to resolve with null.
       taskRepository.repo.findOne.mockResolvedValue(null);
       // Expect the service method to throw a NotFoundException.
-      await expect(tasksService.getTaskById('someId', mockUser)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        tasksService.getTaskById('someId', mockUser),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
